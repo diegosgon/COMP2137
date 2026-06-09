@@ -7,4 +7,8 @@
 # Gather the current user's login name.
 current_user=$(whoami)
 
+#Gather the computer hostname.
+computer_name=$(hostname)
+
 echo "User Name: $current_user"
+echo "Computer Name: $computer_name"
