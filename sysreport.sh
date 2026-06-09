@@ -13,6 +13,14 @@ computer_name=$(hostname)
 #Gather the operating system name.
 os_name=$(source /etc/os-release 2>/dev/null && echo "$PRETTY_NAME")
 
+#Gather the Linux kernel version.
+kernel_version=$(uname -r)
+
+#Gather the system architecture.
+architecture=$(uname -m)
+
 echo "User Name: $current_user"
 echo "Computer Name: $computer_name"
 echo "Operating System: $os_name"
+echo "Kernel Version: $kernel_version"
+echo "Architecture: $architecture"
