@@ -11,7 +11,7 @@ current_user=$(whoami)
 computer_name=$(hostname)
 
 #Gather the operating system name.
-os_name=$(grep '^PRETTY_NAME=' /etc/os-release | cut -d= -f2 | cut -d= -f2 | tr-d '"')
+os_name=$(source /etc/os-release 2>/dev/null && echo "$PRETTY_NAME")
 
 echo "User Name: $current_user"
 echo "Computer Name: $computer_name"
