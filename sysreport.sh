@@ -25,6 +25,9 @@ total_memory=$(free -h | awk '/^Mem:/ {print $2}')
 #Gather root filesystem disk usage.
 disk_usage=$(df -h | awk 'NR==2 {print $2 " total, " $3 " used, " $4 " available"}')
 
+#Gather the primary IP address.
+ip_address=$(hostname -I | awk '{print $1}')
+
 echo "User Name: $current_user"
 echo "Computer Name: $computer_name"
 echo "Operating System: $os_name"
@@ -32,3 +35,4 @@ echo "Kernel Version: $kernel_version"
 echo "Architecture: $architecture"
 echo "Total Memory: $total_memory"
 echo "Root Disk Usage: $disk_usage"
+echo "Primary IP Address: $ip_address"
