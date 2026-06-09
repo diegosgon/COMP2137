@@ -27,12 +27,18 @@ disk_space=$(df -h / | tail -n 1 | awk '{print $2 " total, " $3 " used, " $4 " a
 
 #Gather the primary IP address.
 ip_address=$(hostname -I | awk '{print $1}')
+cat <<EOF
 
-echo "User Name: $current_user"
-echo "Computer Name: $computer_name"
-echo "Operating System: $os_name"
-echo "Kernel Version: $kernel_version"
-echo "Architecture: $architecture"
-echo "Total Memory: $total_memory"
-echo "Root Disk Usage: $disk_space"
-echo "Primary IP Address: $ip_address"
+System Information Report
+=========================
+
+User Name:		$current_user
+Computer Name:		$computer_name
+Operating System:	$os_name
+Kernel Version:		$kernel_version
+Architecture:		$architecture
+Total Memory:		$total_memory
+Root Disk Usage:	$disk_space
+Primary IP Address:	$ip_address
+
+EOF
