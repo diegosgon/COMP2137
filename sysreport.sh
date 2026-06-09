@@ -19,8 +19,12 @@ kernel_version=$(uname -r)
 #Gather the system architecture.
 architecture=$(uname -m)
 
+#Gather total memory in a human-readable format.
+total_memory=$(free -h | awk '/^Mem:/ {print $2}')
+
 echo "User Name: $current_user"
 echo "Computer Name: $computer_name"
 echo "Operating System: $os_name"
 echo "Kernel Version: $kernel_version"
 echo "Architecture: $architecture"
+echo "Total Memory: $total_memory"
