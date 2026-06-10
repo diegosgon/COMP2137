@@ -28,19 +28,20 @@ ram_info=$(free -h 2>/dev/null | awk '/^Mem:/ {print $2}')
 
 #List installed physical disks with vendor, model, and size.
 disk_info=$(lsblk -dno VENDOR,MODEL,SIZE,TYPE |
-    grep ' disk$' |
-    sed 's/ disk$//' |
-    paste -sd ',' - |
-    sed 's/,/, /g')
+	grep ' disk$' |
+	sed 's/ disk$//' |
+	awk '{$1=$1; print}' |
+	paste -sd ',' - |
+	sed 's/,/, /g')
 
 [ -z "$disk_info" ] && disk_info="Unknown"
 
 #Get video card product name from lshw. Fallback to lspci if lshw is unavailable.
 video_info=$(lspci 2>/dev/null |
-    grep -Ei 'vga|3d|display' |
-    head -1 |
-    cut -d: -f3- |
-    sed 's/^ *//')
+	grep -Ei 'vga|3d|display' |
+	head -1 |
+	cut -d: -f3- |
+	sed 's/^ *//')
 
 [ -z "$video_info" ] && video_info="Unknown"
 
@@ -49,8 +50,8 @@ default_interface=$(ip r 2>/dev/null | awk '/^default/ {print $5; exit}')
 
 #Get the IPv4 address assigned to the default route interface.
 host_address=$(ip a show "$default_interface" 2>/dev/null |
-    awk '/inet / {print $2; exit}' |
-    cut -d/ -f1)
+	awk '/inet / {print $2; exit}' |
+	cut -d/ -f1)
 
 [ -z "$host_address" ] && host_address="Unknown"
 
@@ -60,27 +61,27 @@ gateway_ip=$(ip r 2>/dev/null | awk '/^default/ {print $3; exit}')
 
 #Get DNS server for the default network interface, with resolv.conf as fallback.
 dns_server=$(resolvectl dns "$default_interface" 2>/dev/null |
-    head -1 |
-    cut -d: -f2 |
-    awk '{print $1}')
+	head -1 |
+	cut -d: -f2 |
+	awk '{print $1}')
 
 [ -z "$dns_server" ] && dns_server=$(grep '^nameserver' /etc/resolv.conf | head -1 | awk '{print $2}')
 [ -z "$dns_server" ] && dns_server="Unknown"
 
 #List logged-in users once each, separated by commas.
 users_logged_in=$(who |
-    awk '{print $1}' |
-    sort -u |
-    paste -sd, -)
+	awk '{print $1}' |
+	sort -u |
+	paste -sd, -)
 
 [ -z "$users_logged_in" ] && users_logged_in="None"
 
 #Show free space for local filesystems only, formatted as /mountpoint N.
 disk_free=$(df -h -l -x tmpfs -x devtmpfs -x squashfs -x iso9660 --output=target,avail 2>/dev/null |
-    awk 'NR>1 {
+	awk 'NR>1 {
         printf "%s%s %s", sep, $1, $2
         sep=", "
-    } END {print ""}')
+	} END {print ""}')
 
 [ -z "$disk_free" ] && disk_free="Unknown"
 
@@ -94,10 +95,11 @@ load_averages=$(awk '{print $1 ", " $2 ", " $3}' /proc/loadavg 2>/dev/null)
 
 #Extract listening TCP/UDP port numbers, remove duplicates, sort, and format with commas.
 listening_ports=$(ss -tulnH |
-    awk '{print $5}' |
-    awk -F: '{print $NF}' |
-    sort -n -u |
-    paste -sd, -)
+	awk '{print $5}' |
+	awk -F: '{print $NF}' |
+	sort -n -u |
+	paste -sd, - |
+	sed 's/,/, /g')
 
 [ -z "$listening_ports" ] && listening_ports="None"
 
