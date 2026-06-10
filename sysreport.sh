@@ -82,7 +82,7 @@ disk_free=$(df -h -l -x tmpfs -x devtmpfs -x squashfs -x iso9660 --output=target
         sep=", "
     } END {print ""}')
 
-S[ -z "$disk_free" ] && disk_free="Unknown"
+[ -z "$disk_free" ] && disk_free="Unknown"
 
 #Count running processes.
 process_count=$(ps -e --no-headers 2>/dev/null | wc -l)
